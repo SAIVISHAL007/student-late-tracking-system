@@ -2,21 +2,22 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
+import studentRoutes from "./routes/studentRoutes.js";
 
 dotenv.config();
 
 const app = express();
 
-// CORS configuration for production
+// CORS configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL?.split(',') || []
-    : ['http://localhost:3000'],
+  origin: ['http://localhost:3000'],
   credentials: true
 }));
 
 app.use(express.json());
+
+// Routes
+app.use("/api/students", studentRoutes);
 
 mongoose.set('bufferCommands', false);
 
@@ -67,7 +68,7 @@ process.on('SIGINT', async () => {
 
 app.get("/", async (req, res) => {
   try {
-    const { default: Student } = await import('./models/Student.js');
+    const { default: Student } = await import('./models/student.js');
     
     const students = await Student.find({}).lean();
     
@@ -244,11 +245,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
   });
 }
-
-// Export for Vercel
-export default app;
-import studentRoutes from "./routes/studentRoutes.js";
-app.use("/api/students", studentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
