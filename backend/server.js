@@ -10,7 +10,7 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: true, // Railway will handle CORS properly
+  origin: true,
   credentials: true
 }));
 
