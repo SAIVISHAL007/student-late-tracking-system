@@ -39,9 +39,9 @@ StudentLateTrackingSystem/
 - Automatic fine calculation based on late days
 
 ## Key Algorithms
-1. **Progressive Fine System**: ₹10 × (lateDays)²
-2. **Grace Period**: 3 free late days per student
-3. **Status Management**: Regular → Warning → Critical → Suspended
+1. **Progressive Fine System**: ₹5 per day after grace period
+2. **Grace Period**: 4 free late days (11-14 total late days)
+3. **Late Day Limit**: 10 days normal + 4 days grace = 14 days maximum
 
 ## Installation & Setup
 1. Install Node.js and MongoDB
@@ -49,5 +49,10 @@ StudentLateTrackingSystem/
 3. Frontend: `npm install` → `npm start`
 4. Access at http://localhost:3000
 
+## Login Credentials
+- Faculty: `faculty` / `pass123`
+- Admin: `admin` / `admin123`
+- Teacher: `teacher` / `teacher123`
+
 ---
-*This is a simplified version containing only essential code components for academic record purposes.*
+*Essential code components for academic record purposes.*
