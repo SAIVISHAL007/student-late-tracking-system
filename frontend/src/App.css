@@ -1,0 +1,17 @@
+/* Student Late Tracking System - Custom Styles */
+
+/* Global utility styles */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Print styles for exported reports */
+@media print {
+  body { font-size: 12px; }
+  .no-print { display: none !important; }
+}
