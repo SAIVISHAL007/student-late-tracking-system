@@ -32,10 +32,11 @@ function Login({ onLogin }) {
         isAuthenticated: true
       }));
       
+      // Prevent browser password manager interference
       setTimeout(() => {
-        onLogin(credentials.username);
         setLoading(false);
-      }, 500);
+        onLogin(credentials.username);
+      }, 100);
     } else {
       setError("❌ Invalid username or password");
       setLoading(false);
@@ -87,7 +88,7 @@ function Login({ onLogin }) {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div style={{ marginBottom: "1.5rem" }}>
             <label style={{
               display: "block",
@@ -103,6 +104,10 @@ function Login({ onLogin }) {
               value={credentials.username}
               onChange={handleInputChange}
               placeholder="Enter faculty username"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
               style={{
                 width: "100%",
                 padding: "12px 16px",
@@ -132,6 +137,10 @@ function Login({ onLogin }) {
               value={credentials.password}
               onChange={handleInputChange}
               placeholder="Enter password"
+              autoComplete="new-password"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
               style={{
                 width: "100%",
                 padding: "12px 16px",
