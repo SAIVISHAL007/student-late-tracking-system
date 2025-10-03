@@ -15,17 +15,6 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState(null);
 
-  // Error boundary
-  if (error) {
-    return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h1>🚨 Something went wrong</h1>
-        <p>Error: {error.message}</p>
-        <button onClick={() => setError(null)}>Try Again</button>
-      </div>
-    );
-  }
-
   const handlePageChange = (pageId) => {
     setCurrentPage(pageId);
   };
@@ -76,6 +65,17 @@ function App() {
       window.removeEventListener('sidebarToggle', handleSidebarToggle);
     };
   }, []);
+
+  // Error boundary - render error UI if there's an error
+  if (error) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h1>🚨 Something went wrong</h1>
+        <p>Error: {error.message}</p>
+        <button onClick={() => setError(null)}>Try Again</button>
+      </div>
+    );
+  }
 
   const renderCurrentPage = () => {
     switch (currentPage) {
