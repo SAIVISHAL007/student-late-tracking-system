@@ -6,25 +6,40 @@ import AdminManagement from "./components/AdminManagement";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
-import TestApp from "./TestApp";
+
 import { isAuthenticated } from "./utils/auth";
 
 function App() {
-  // TEMPORARY: Return test app to diagnose blank screen
-  return <TestApp />;
   const [currentPage, setCurrentPage] = useState("mark-late");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Error boundary
+  if (error) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h1>🚨 Something went wrong</h1>
+        <p>Error: {error.message}</p>
+        <button onClick={() => setError(null)}>Try Again</button>
+      </div>
+    );
+  }
 
   const handlePageChange = (pageId) => {
     setCurrentPage(pageId);
   };
 
   const handleLogin = (username) => {
-    console.log(`🔑 Login attempt for: ${username}`);
-    setAuthenticated(true);
-    console.log(`✅ Faculty ${username} logged in successfully`);
-    console.log(`🔍 Auth state set to: true`);
+    try {
+      console.log(`🔑 Login attempt for: ${username}`);
+      setAuthenticated(true);
+      console.log(`✅ Faculty ${username} logged in successfully`);
+      console.log(`🔍 Auth state set to: true`);
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err);
+    }
   };
 
   const handleLogout = () => {
@@ -35,9 +50,14 @@ function App() {
 
   // Check authentication status on app load
   useEffect(() => {
-    const authStatus = isAuthenticated();
-    console.log(`🔍 Initial auth check: ${authStatus}`);
-    setAuthenticated(authStatus);
+    try {
+      const authStatus = isAuthenticated();
+      console.log(`🔍 Initial auth check: ${authStatus}`);
+      setAuthenticated(authStatus);
+    } catch (err) {
+      console.error('Auth check error:', err);
+      setError(err);
+    }
   }, []);
 
   // Monitor authentication state changes
@@ -177,12 +197,13 @@ function App() {
   };
 
   // Show login screen if not authenticated
-  if (!authenticated) {
-    console.log(`🚪 Rendering login screen - authenticated: ${authenticated}`);
-    return <Login onLogin={handleLogin} />;
-  }
+  try {
+    if (!authenticated) {
+      console.log(`🚪 Rendering login screen - authenticated: ${authenticated}`);
+      return <Login onLogin={handleLogin} />;
+    }
 
-  console.log(`🏠 Rendering main app - authenticated: ${authenticated}`);
+    console.log(`🏠 Rendering main app - authenticated: ${authenticated}`);
 
   return (
     <div style={{
@@ -223,6 +244,16 @@ function App() {
       </div>
     </div>
   );
+  } catch (err) {
+    console.error('Render error:', err);
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h1>🚨 Render Error</h1>
+        <p>Error: {err.message}</p>
+        <button onClick={() => window.location.reload()}>Reload Page</button>
+      </div>
+    );
+  }
 }
 
 export default App;
