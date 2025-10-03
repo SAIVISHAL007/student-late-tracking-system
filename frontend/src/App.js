@@ -6,9 +6,12 @@ import AdminManagement from "./components/AdminManagement";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
+import TestApp from "./TestApp";
 import { isAuthenticated } from "./utils/auth";
 
 function App() {
+  // TEMPORARY: Return test app to diagnose blank screen
+  return <TestApp />;
   const [currentPage, setCurrentPage] = useState("mark-late");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
