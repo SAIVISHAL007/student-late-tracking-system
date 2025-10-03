@@ -6,29 +6,20 @@ import AdminManagement from "./components/AdminManagement";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
-
 import { isAuthenticated } from "./utils/auth";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("mark-late");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
-  const [error, setError] = useState(null);
 
   const handlePageChange = (pageId) => {
     setCurrentPage(pageId);
   };
 
   const handleLogin = (username) => {
-    try {
-      console.log(`🔑 Login attempt for: ${username}`);
-      setAuthenticated(true);
-      console.log(`✅ Faculty ${username} logged in successfully`);
-      console.log(`🔍 Auth state set to: true`);
-    } catch (err) {
-      console.error('Login error:', err);
-      setError(err);
-    }
+    setAuthenticated(true);
+    console.log(`✅ Faculty ${username} logged in successfully`);
   };
 
   const handleLogout = () => {
@@ -39,20 +30,8 @@ function App() {
 
   // Check authentication status on app load
   useEffect(() => {
-    try {
-      const authStatus = isAuthenticated();
-      console.log(`🔍 Initial auth check: ${authStatus}`);
-      setAuthenticated(authStatus);
-    } catch (err) {
-      console.error('Auth check error:', err);
-      setError(err);
-    }
+    setAuthenticated(isAuthenticated());
   }, []);
-
-  // Monitor authentication state changes
-  useEffect(() => {
-    console.log(`🔄 Auth state changed to: ${authenticated}`);
-  }, [authenticated]);
 
   // Listen for sidebar toggle events
   useEffect(() => {
@@ -65,17 +44,6 @@ function App() {
       window.removeEventListener('sidebarToggle', handleSidebarToggle);
     };
   }, []);
-
-  // Error boundary - render error UI if there's an error
-  if (error) {
-    return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h1>🚨 Something went wrong</h1>
-        <p>Error: {error.message}</p>
-        <button onClick={() => setError(null)}>Try Again</button>
-      </div>
-    );
-  }
 
   const renderCurrentPage = () => {
     switch (currentPage) {
@@ -197,13 +165,9 @@ function App() {
   };
 
   // Show login screen if not authenticated
-  try {
-    if (!authenticated) {
-      console.log(`🚪 Rendering login screen - authenticated: ${authenticated}`);
-      return <Login onLogin={handleLogin} />;
-    }
-
-    console.log(`🏠 Rendering main app - authenticated: ${authenticated}`);
+  if (!authenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div style={{
@@ -244,16 +208,6 @@ function App() {
       </div>
     </div>
   );
-  } catch (err) {
-    console.error('Render error:', err);
-    return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h1>🚨 Render Error</h1>
-        <p>Error: {err.message}</p>
-        <button onClick={() => window.location.reload()}>Reload Page</button>
-      </div>
-    );
-  }
 }
 
 export default App;
