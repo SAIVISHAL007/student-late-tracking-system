@@ -18,8 +18,10 @@ function App() {
   };
 
   const handleLogin = (username) => {
+    console.log(`🔑 Login attempt for: ${username}`);
     setAuthenticated(true);
     console.log(`✅ Faculty ${username} logged in successfully`);
+    console.log(`🔍 Auth state set to: true`);
   };
 
   const handleLogout = () => {
@@ -30,8 +32,15 @@ function App() {
 
   // Check authentication status on app load
   useEffect(() => {
-    setAuthenticated(isAuthenticated());
+    const authStatus = isAuthenticated();
+    console.log(`🔍 Initial auth check: ${authStatus}`);
+    setAuthenticated(authStatus);
   }, []);
+
+  // Monitor authentication state changes
+  useEffect(() => {
+    console.log(`🔄 Auth state changed to: ${authenticated}`);
+  }, [authenticated]);
 
   // Listen for sidebar toggle events
   useEffect(() => {
@@ -166,8 +175,11 @@ function App() {
 
   // Show login screen if not authenticated
   if (!authenticated) {
+    console.log(`🚪 Rendering login screen - authenticated: ${authenticated}`);
     return <Login onLogin={handleLogin} />;
   }
+
+  console.log(`🏠 Rendering main app - authenticated: ${authenticated}`);
 
   return (
     <div style={{
