@@ -19,8 +19,6 @@ app.use(express.json());
 // Routes
 app.use("/api/students", studentRoutes);
 
-mongoose.set('bufferCommands', false);
-
 // Use MONGODB_URI for production deployment
 const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/studentLateTracking';
 
